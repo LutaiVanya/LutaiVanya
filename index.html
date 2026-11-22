@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#f4b6c2">
+<title>💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Lobster&family=Marck+Script&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
+
+<script>
+/* =====================================================================
+   НАЛАШТУВАННЯ САЙТУ — тут міняється весь текст, фото, відео і музика.
+   Фото/відео кладіть у папку photos/ і пишіть шлях, напр. "photos/1.jpg".
+   Порожні лапки "" = на сайті буде красива заглушка.
+   Підтримуються: .jpg .jpeg .png .webp .gif  та відео .mp4 .mov .webm
+   ===================================================================== */
+const CONFIG = {
+  name: "Sunshine",               // ім'я того, кому сайт
+  from: "Me",                     // підпис у листі
+
+  // фонові «рукописні» фрази
+  scribbles: [
+    "my baby is perfect",
+    "i love every little thing about you",
+    "hey baby, you are my favourite person",
+  ],
+
+  // Сторінка 1
+  hero: {
+    photo: "",
+    caption: "I love spending time with you ❤️",
+  },
+  ticket: { label: "BUNNY", emoji: "🐰", number: "92914" },
+  song: {
+    title: "Our Song",
+    artist: "Artist name",
+    cover: "",                    // обкладинка пісні (картинка)
+    src: "",                      // аудіофайл, напр. "photos/song.mp3"
+  },
+  postcard: "I want you to open this",
+
+  // Сторінка 2
+  strip: {
+    photos: ["", "", ""],
+    note: "I love you baby ❤️",
+    sticker: "",                  // маленьке фото/стікер справа
+    banner: "my baby, I love you · my baby, I love you",
+  },
+
+  // Сторінка 3
+  gallery: [
+    { photo: "", caption: "I love us ❤️" },
+    { photo: "", caption: "I love you ❤️" },
+    { photo: "", caption: "I love going on road trips with you 😊" },
+    { photo: "", caption: "I love you ❤️" },
+  ],
+  galleryLabel: "i love you",
+
+  // Лист
+  letter: {
+    greeting: "Dear {name},",
+    text: "Hey baby, I love you more than words can say. Everything about you is perfect to me, your eyes, lips, voice, and laugh. I love every little thing about you. ❤️",
+  },
+
+  // Що з'являється після натискання на серце в кінці
+  finale: "Happy Birthday, my love 🎂",
+};
+</script>
+
+<style>
+:root{
+  --bg:#fbe4e9;
+  --check:rgba(236,120,146,.42);
+  --check-strong:rgba(214,38,78,.55);
+  --wine:#8f1336;
+  --wine-2:#b81d4a;
+  --rose:#f2a5b4;
+  --rose-2:#f7c6cf;
+  --cream:#fcf7f0;
+  --ink:#4b0d1f;
+  --script:"Marck Script", cursive;
+  --hand:"Caveat", cursive;
+  --title:"Lobster", cursive;
+  --ui:"Montserrat", system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--ui);
+  color:var(--ink);
+  background-color:var(--bg);
+  background-image:
+    linear-gradient(90deg,var(--check) 50%,transparent 50%),
+    linear-gradient(var(--check) 50%,transparent 50%);
+  background-size:52px 52px;
+  overflow-x:hidden;
+  min-height:100svh;
+}
+body.locked{overflow:hidden;height:100svh}
+img,video{display:block;width:100%;height:100%;object-fit:cover}
+button{font:inherit;border:0;background:none;color:inherit;cursor:pointer}
+
+/* ---------- reusable bits ---------- */
+.stk{filter:
+  drop-shadow(2px 0 0 #fff) drop-shadow(-2px 0 0 #fff)
+  drop-shadow(0 2px 0 #fff) drop-shadow(0 -2px 0 #fff)
+  drop-shadow(0 6px 8px rgba(120,20,50,.18));}
+.deco{position:absolute;pointer-events:none;z-index:6;animation:sway 6s ease-in-out infinite;transform-origin:50% 60%}
+.deco.slow{animation-duration:9s}
+.deco.flip{animation-direction:reverse}
+@keyframes sway{0%,100%{rotate:-3deg}50%{rotate:4deg}}
+.gframe{
+  padding:10px;
+  background-color:#fff;
+  background-image:
+    linear-gradient(90deg,var(--check-strong) 50%,transparent 50%),
+    linear-gradient(var(--check-strong) 50%,transparent 50%);
+  background-size:10px 10px;
+  box-shadow:0 10px 22px rgba(120,20,50,.22);
+}
+.torn{clip-path:polygon(0 8px,6% 0,12% 6px,19% 1px,26% 7px,33% 0,41% 6px,48% 1px,56% 7px,63% 0,71% 6px,78% 1px,86% 7px,93% 0,100% 6px,100% calc(100% - 7px),94% 100%,87% calc(100% - 6px),80% 100%,72% calc(100% - 6px),65% calc(100% - 1px),57% calc(100% - 7px),49% 100%,42% calc(100% - 6px),34% 100%,27% calc(100% - 7px),19% calc(100% - 1px),12% calc(100% - 6px),5% 100%,0 calc(100% - 7px))}
+.tape{position:absolute;width:110px;height:28px;background:rgba(244,150,170,.7);left:50%;top:-14px;translate:-50% 0;rotate:-3deg;z-index:3;
+  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.25) 0 6px,transparent 6px 12px)}
+.photo{position:relative;overflow:hidden;background:#f6d9df}
+.photo .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  color:#c2577a;font:600 12px/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;
+  background:repeating-linear-gradient(-45deg,#fbe8ec 0 12px,#f7dbe2 12px 24px)}
+.photo .ph svg{width:34px;height:34px;opacity:.8}
+.reveal{opacity:0;translate:0 28px;transition:opacity .8s ease,translate .8s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;translate:0 0}
+
+/* ---------- INTRO / ENVELOPE ---------- */
+#intro{
+  position:fixed;inset:0;z-index:100;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;
+  background:inherit;background-color:var(--bg);
+  background-image:
+    linear-gradient(90deg,var(--check) 50%,transparent 50%),
+    linear-gradient(var(--check) 50%,transparent 50%);
+  background-size:52px 52px;
+  transition:opacity .9s ease, visibility .9s;
+  overflow:hidden;
+}
+#intro.gone{opacity:0;visibility:hidden}
+.envelope{position:relative;width:min(80vw,340px);aspect-ratio:1.45;perspective:1000px;cursor:pointer;margin-top:4vh;
+  animation:float 3.5s ease-in-out infinite}
+@keyframes float{0%,100%{translate:0 0}50%{translate:0 -8px}}
+.env-back{position:absolute;inset:0;background:#ec9fad;border-radius:6px;box-shadow:0 22px 40px rgba(140,30,60,.28)}
+.env-card{position:absolute;left:6%;right:6%;top:7%;height:86%;z-index:1;background:var(--cream);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;font:42px var(--script);color:var(--wine);
+  transition:transform .9s cubic-bezier(.3,.9,.3,1) 1s}
+.env-l,.env-r,.env-b{position:absolute;inset:0;z-index:2;border-radius:6px}
+.env-l{background:#f1abb8;clip-path:polygon(0 0,51% 55%,0 100%)}
+.env-r{background:#efa6b3;clip-path:polygon(100% 0,49% 55%,100% 100%)}
+.env-b{background:#f5b8c3;clip-path:polygon(0 100%,50% 47%,100% 100%)}
+.env-flap{position:absolute;left:0;right:0;top:0;height:60%;z-index:3;background:#f9cdd5;
+  clip-path:polygon(0 0,100% 0,50% 100%);transform-origin:50% 0;
+  transition:transform .8s ease .35s, z-index 0s linear .75s}
+.seal{position:absolute;left:50%;top:57%;z-index:4;width:76px;height:76px;translate:-50% -50%;
+  border-radius:48% 52% 50% 50%/52% 47% 53% 48%;
+  background:radial-gradient(circle at 35% 30%,#d93464,#a2103d 55%,#6c0624);
+  box-shadow:0 5px 10px rgba(80,0,20,.35),inset 0 0 0 6px rgba(0,0,0,.13),inset 0 0 0 9px rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:center;transition:transform .35s ease,opacity .35s ease}
+.seal svg{width:46%;height:46%;filter:drop-shadow(0 1px 1px rgba(0,0,0,.35))}
+.envelope.open{animation:none}
+.envelope.open .seal{transform:scale(.2) rotate(-30deg);opacity:0}
+.envelope.open .env-flap{transform:rotateX(180deg);z-index:0}
+.envelope.open .env-card{transform:translateY(-62%)}
+.intro-name{font:clamp(46px,14vw,62px)/1 var(--title);color:var(--wine);text-align:center;padding:0 16px;
+  text-shadow:0 2px 0 #fff,0 -2px 0 #fff,2px 0 0 #fff,-2px 0 0 #fff,2px 2px 0 #fff,-2px -2px 0 #fff,2px -2px 0 #fff,-2px 2px 0 #fff,0 8px 18px rgba(140,20,50,.25)}
+.tap-btn{padding:16px 38px;border-radius:40px;background:rgba(255,255,255,.88);color:var(--wine);
+  font:700 15px/1 var(--ui);letter-spacing:.32em;text-indent:.32em;box-shadow:0 8px 20px rgba(140,20,50,.18);
+  animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{scale:1}50%{scale:1.05}}
+
+/* ---------- MAIN ---------- */
+main{position:relative;max-width:480px;margin:0 auto;overflow:hidden}
+.page{position:relative;min-height:100svh;padding:70px 18px 60px}
+.bg-script{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.bg-script p{position:absolute;left:-10%;white-space:nowrap;font:34px var(--script);color:rgba(150,20,52,.2);rotate:-9deg}
+
+/* page 1 */
+.title-paper{position:relative;z-index:4;margin:0 auto 18px;width:fit-content;max-width:92%;padding:14px 34px 18px;background:var(--cream);rotate:-2deg;
+  font:clamp(48px,15vw,68px)/1 var(--script);color:var(--wine);text-align:center;box-shadow:0 8px 16px rgba(120,20,50,.15)}
+.polaroid{position:relative;z-index:3;background:#fff;padding:12px 12px 0;box-shadow:0 14px 28px rgba(120,20,50,.25)}
+.polaroid figcaption{font:600 23px/1.1 var(--hand);color:var(--ink);text-align:center;padding:12px 6px 14px}
+.hero{width:88%;margin:0 auto;rotate:2deg}
+.hero .photo{aspect-ratio:4/5}
+.row1{position:relative;z-index:5;display:flex;align-items:flex-start;margin-top:4px}
+.ticket{position:relative;width:62%;rotate:-6deg;background:#f0a7b5;padding:10px;box-shadow:0 10px 18px rgba(120,20,50,.2);
+  -webkit-mask:radial-gradient(circle 9px at 100% 50%,transparent 98%,#000) ;mask:radial-gradient(circle 9px at 100% 50%,transparent 98%,#000)}
+.ticket-in{border:2px solid #5a0e22;padding:20px 12px;display:flex;align-items:center;gap:10px;font:700 26px/1 Georgia,serif;letter-spacing:.06em;color:#3c0915}
+.ticket-no{position:absolute;right:6px;top:50%;translate:0 -50%;writing-mode:vertical-rl;font:700 15px Georgia,serif;letter-spacing:.15em;color:#3c0915}
+.player{position:relative;z-index:6;margin:-18px 0 0 auto;width:92%;rotate:1.5deg;background:#f9cdd6;border-radius:20px;padding:16px 16px 14px;
+  box-shadow:0 14px 26px rgba(120,20,50,.22)}
+.pl-top{display:flex;gap:14px;align-items:center}
+.pl-cover{flex:0 0 64px;height:64px;border-radius:10px}
+.pl-cover .ph svg{width:22px;height:22px}
+.pl-cover .ph span{display:none}
+.pl-meta{min-width:0;flex:1}
+.pl-title{font:700 19px/1.2 var(--ui);color:#3a0a17;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-artist{font:500 15px/1.3 var(--ui);color:#a03357}
+.eq{display:flex;gap:3px;align-items:flex-end;height:18px;margin-left:auto;flex:0 0 auto}
+.eq i{width:4px;height:100%;background:var(--wine-2);border-radius:2px;transform-origin:bottom;transform:scaleY(.25)}
+.player.playing .eq i{animation:eq .9s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:-.3s!important}.eq i:nth-child(3){animation-delay:-.6s!important}.eq i:nth-child(4){animation-delay:-.15s!important}
+@keyframes eq{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+.pl-bar{display:flex;align-items:center;gap:10px;margin-top:14px;font:600 12px var(--ui);color:#7c2443;font-variant-numeric:tabular-nums}
+.pl-track{flex:1;height:5px;border-radius:3px;background:rgba(143,19,54,.18);overflow:hidden}
+.pl-fill{height:100%;width:0;background:var(--wine-2);border-radius:3px}
+.pl-btn{display:block;margin:10px auto 2px;width:52px;height:52px;border-radius:50%;color:#3a0a17}
+.pl-btn svg{width:30px;height:30px}
+.pl-foot{text-align:center;font:500 12px var(--ui);color:#9a4060}
+.postcard{position:relative;z-index:4;margin-top:-6px;width:84%;rotate:-2deg;background:#fdfbf8;padding:22px 20px;display:grid;grid-template-columns:1fr auto;gap:12px;
+  background-image:radial-gradient(rgba(150,60,80,.18) 1px,transparent 1.2px);background-size:12px 12px;box-shadow:0 10px 22px rgba(120,20,50,.2);text-align:left;cursor:pointer}
+.postcard p{font:600 28px/1.25 var(--hand);color:var(--ink);align-self:end;border-right:1.5px solid rgba(90,20,40,.25);padding-right:12px}
+.stamp{width:70px;height:84px;background:#f2a2b2;border:5px dotted #fdfbf8;outline:1px solid rgba(200,80,110,.25);outline-offset:-1px;rotate:4deg;
+  display:flex;align-items:center;justify-content:center}
+.stamp svg{width:38px;height:38px;color:#e2264f;animation:pulse 1.6s ease-in-out infinite}
+.hint{position:relative;z-index:5;margin:26px auto 0;text-align:center;font:600 11px var(--ui);letter-spacing:.28em;color:var(--wine);opacity:.75}
+.hint b{display:block;font-size:18px;animation:float 1.6s ease-in-out infinite}
+
+/* page 2 */
+.p2-grid{position:relative;z-index:3;display:grid;grid-template-columns:57% 1fr;gap:10px;align-items:start}
+.strip{display:flex;flex-direction:column;gap:10px;rotate:-1.5deg}
+.strip .photo{aspect-ratio:4/3.3;border:3px solid #fff}
+.p2-side{position:relative;display:flex;flex-direction:column;align-items:center;padding-top:42%}
+.note{position:relative;z-index:7;width:150%;margin-left:-40%;rotate:-4deg;background:var(--cream);padding:16px 14px;
+  font:34px/1.05 var(--script);color:var(--ink);text-align:center;box-shadow:0 8px 16px rgba(120,20,50,.18)}
+.sticker{margin-top:22px;width:100%;aspect-ratio:1;border:6px solid #fff;border-radius:16px;rotate:5deg;box-shadow:0 10px 20px rgba(120,20,50,.2)}
+.sticker .ph span{font-size:10px}
+.banner{position:relative;z-index:4;margin:34px -18px 0;padding:18px 0 22px;background:#f3b3bf;overflow:hidden;white-space:nowrap}
+.banner p{display:inline-block;font:34px/1 var(--script);color:var(--wine);animation:marquee 14s linear infinite;padding-left:100%}
+@keyframes marquee{to{transform:translateX(-100%)}}
+
+/* page 3 */
+.gallery{position:relative;z-index:3;display:grid;grid-template-columns:1fr 1fr;gap:26px 14px}
+.gitem{position:relative}
+.gitem:nth-child(1){rotate:-4deg}
+.gitem:nth-child(2){rotate:3deg;margin-top:46px}
+.gitem:nth-child(3){rotate:2deg;margin-top:-30px}
+.gitem:nth-child(4){rotate:-3deg;margin-top:16px}
+.gitem .photo{aspect-ratio:3/4}
+.gcap{position:relative;margin:-8px auto 0;width:92%;background:#fff;padding:6px 8px 4px;text-align:center;font:600 20px/1.1 var(--hand);color:var(--ink);
+  box-shadow:0 4px 8px rgba(120,20,50,.15)}
+.glabel{position:absolute;z-index:8;left:50%;top:44%;transform:translate(-50%,-50%) rotate(-5deg);background:var(--cream);padding:10px 26px 14px;
+  font:40px/1 var(--script);color:var(--wine);white-space:nowrap;box-shadow:0 10px 20px rgba(120,20,50,.22)}
+
+/* letter */
+.letter{position:relative;z-index:3;margin-top:40px;background:var(--cream);padding:46px 26px 40px;box-shadow:0 16px 34px rgba(120,20,50,.25)}
+.l-greet{font:700 46px/1 var(--hand);color:#3e0916}
+.l-div{display:flex;align-items:center;gap:12px;margin:22px 0 20px;color:#e0566d}
+.l-div::before,.l-div::after{content:"";flex:1;height:1.5px;background:#ee9aa8}
+.l-div svg{width:16px;height:16px}
+.l-text{font:600 27px/1.55 var(--hand);color:#3e0916;white-space:pre-line}
+.l-sign{margin:28px 0 0 auto;width:fit-content;min-width:55%;text-align:right;font:700 44px/1 var(--hand);color:#e0566d;padding-bottom:6px;
+  border-bottom:2px solid #ee9aa8;border-radius:0 0 40% 60%/0 0 10px 6px}
+.heart-wrap{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;margin-top:40px}
+.heart-btn{width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.75);box-shadow:0 0 0 14px rgba(255,255,255,.35),0 14px 30px rgba(140,20,50,.2);
+  display:flex;align-items:center;justify-content:center;color:#e2264f;animation:pulse 1.4s ease-in-out infinite}
+.heart-btn svg{width:56px;height:56px}
+.heart-tip{margin-top:26px;font:600 11px var(--ui);letter-spacing:.3em;color:var(--wine);opacity:.75}
+.finale{margin-top:18px;min-height:2.4em;font:clamp(34px,10vw,46px)/1.15 var(--title);color:var(--wine);text-align:center;
+  text-shadow:0 2px 0 #fff,0 -2px 0 #fff,2px 0 0 #fff,-2px 0 0 #fff;opacity:0;scale:.6;transition:opacity .6s ease,scale .6s cubic-bezier(.3,1.6,.5,1)}
+.finale.show{opacity:1;scale:1}
+
+/* effects */
+#petals{position:fixed;inset:0;pointer-events:none;z-index:40;overflow:hidden}
+.petal{position:absolute;top:-30px;width:14px;height:18px;background:linear-gradient(135deg,#ffd0de,#f58fae);border-radius:0 80% 0 80%;opacity:.85;
+  animation:fall linear forwards}
+@keyframes fall{to{transform:translate(var(--dx),110vh) rotate(var(--r))}}
+.burst{position:fixed;z-index:120;pointer-events:none;font-size:26px;animation:burst 1.4s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes burst{0%{transform:translate(-50%,-50%) scale(.3);opacity:1}100%{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(1.2) rotate(var(--r));opacity:0}}
+
+@media (min-width:560px){
+  main{box-shadow:0 0 0 1px rgba(255,255,255,.4)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body class="locked">
+
+<!-- ================= SVG stickers (всі прикраси намальовані кодом, без картинок) ================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <radialGradient id="gHib" cx="0" cy="0" r="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#c10c55"/><stop offset=".28" stop-color="#ec4a8d"/><stop offset=".72" stop-color="#ff9fc8"/><stop offset="1" stop-color="#ffd6e7"/>
+    </radialGradient>
+    <radialGradient id="gBlos" cx="0" cy="0" r="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ef6e9b"/><stop offset=".35" stop-color="#ffbdd2"/><stop offset="1" stop-color="#fff3f7"/>
+    </radialGradient>
+    <radialGradient id="gPlum" cx="0" cy="0" r="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffb02e"/><stop offset=".22" stop-color="#ff6f9f"/><stop offset=".7" stop-color="#f98cb9"/><stop offset="1" stop-color="#fcc3dc"/>
+    </radialGradient>
+    <linearGradient id="gGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffeab0"/><stop offset=".5" stop-color="#e3ad55"/><stop offset="1" stop-color="#a8712a"/>
+    </linearGradient>
+    <pattern id="pGing" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#fff"/><rect width="5" height="10" fill="rgba(214,30,70,.5)"/><rect width="10" height="5" fill="rgba(214,30,70,.5)"/>
+    </pattern>
+    <path id="petHib" d="M0 0 C -24 -8 -36 -38 -21 -54 C -8 -64 8 -64 21 -54 C 36 -38 24 -8 0 0Z"/>
+    <path id="petBlos" d="M0 0 C -20 -10 -27 -36 -15 -48 C -9 -54 -3 -50 0 -44 C 3 -50 9 -54 15 -48 C 27 -36 20 -10 0 0Z"/>
+    <path id="petPlum" d="M0 0 C -8 -14 -4 -44 13 -52 C 27 -57 31 -41 23 -29 C 15 -17 7 -8 0 0Z"/>
+    <g id="veinH"><path d="M0 -8 L0 -50"/><path d="M0 -8 Q -8 -28 -15 -44"/><path d="M0 -8 Q 8 -28 15 -44"/></g>
+    <g id="stamB"><path d="M0 0 L0 -15" stroke="#f08aa8" stroke-width="1.2"/><circle cy="-16" r="1.8" fill="#f2b234"/></g>
+    <path id="heartP" d="M50 88 C 20 65 4 48 4 30 C 4 15 16 4 30 4 C 40 4 47 10 50 18 C 53 10 60 4 70 4 C 84 4 96 15 96 30 C 96 48 80 65 50 88Z"/>
+    <clipPath id="heartClip"><use href="#heartP"/></clipPath>
+  </defs>
+
+  <symbol id="sHibiscus" viewBox="-64 -64 128 128">
+    <g fill="url(#gHib)" stroke="#e23a80" stroke-width=".8">
+      <use href="#petHib"/><use href="#petHib" transform="rotate(72)"/><use href="#petHib" transform="rotate(144)"/><use href="#petHib" transform="rotate(216)"/><use href="#petHib" transform="rotate(288)"/>
+    </g>
+    <g stroke="#fff" stroke-opacity=".45" fill="none">
+      <use href="#veinH"/><use href="#veinH" transform="rotate(72)"/><use href="#veinH" transform="rotate(144)"/><use href="#veinH" transform="rotate(216)"/><use href="#veinH" transform="rotate(288)"/>
+    </g>
+    <circle r="7" fill="#a8063f"/>
+    <path d="M0 0 Q 10 -14 22 -32" stroke="#f45b92" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+    <g fill="#ffd24a"><circle cx="20" cy="-35" r="2.4"/><circle cx="26" cy="-33" r="2.4"/><circle cx="24" cy="-28" r="2.4"/><circle cx="18" cy="-30" r="2.2"/></g>
+  </symbol>
+
+  <symbol id="sBlossom" viewBox="-56 -56 112 112">
+    <g fill="url(#gBlos)" stroke="#f3a0bb" stroke-width=".8">
+      <use href="#petBlos"/><use href="#petBlos" transform="rotate(72)"/><use href="#petBlos" transform="rotate(144)"/><use href="#petBlos" transform="rotate(216)"/><use href="#petBlos" transform="rotate(288)"/>
+    </g>
+    <use href="#stamB"/><use href="#stamB" transform="rotate(40)"/><use href="#stamB" transform="rotate(80)"/><use href="#stamB" transform="rotate(120)"/><use href="#stamB" transform="rotate(160)"/><use href="#stamB" transform="rotate(200)"/><use href="#stamB" transform="rotate(240)"/><use href="#stamB" transform="rotate(280)"/><use href="#stamB" transform="rotate(320)"/>
+    <circle r="5" fill="#e8507f"/>
+  </symbol>
+
+  <symbol id="sPlumeria" viewBox="-60 -60 120 120">
+    <g fill="url(#gPlum)" stroke="#e8689a" stroke-width=".8">
+      <use href="#petPlum"/><use href="#petPlum" transform="rotate(72)"/><use href="#petPlum" transform="rotate(144)"/><use href="#petPlum" transform="rotate(216)"/><use href="#petPlum" transform="rotate(288)"/>
+    </g>
+    <circle r="6" fill="#ffbf47"/>
+  </symbol>
+
+  <symbol id="sBow" viewBox="0 0 200 160">
+    <g fill="url(#pGing)" stroke="#b5244a" stroke-width="2" stroke-linejoin="round">
+      <path d="M95 70 L58 150 L76 140 L86 156 L106 74Z"/>
+      <path d="M105 70 L142 150 L124 140 L114 156 L94 74Z"/>
+      <path d="M100 62 C 70 18 18 8 14 46 C 10 84 62 86 100 72Z"/>
+      <path d="M100 62 C 130 18 182 8 186 46 C 190 84 138 86 100 72Z"/>
+      <rect x="86" y="50" width="28" height="28" rx="9"/>
+    </g>
+    <g fill="none" stroke="#b5244a" stroke-width="1.4" opacity=".6">
+      <path d="M86 64 C 66 44 42 38 34 46"/><path d="M114 64 C 134 44 158 38 166 46"/>
+    </g>
+  </symbol>
+
+  <symbol id="sButterfly" viewBox="-50 -42 100 84">
+    <g fill="#d3d2ff" stroke="#8d89e8" stroke-width="1.6">
+      <path d="M-3 -4 C -20 -42 -50 -36 -45 -13 C -42 1 -20 3 -3 0Z"/>
+      <path d="M-3 3 C -22 6 -34 27 -20 33 C -10 37 -4 22 -3 7Z"/>
+      <g transform="scale(-1,1)">
+        <path d="M-3 -4 C -20 -42 -50 -36 -45 -13 C -42 1 -20 3 -3 0Z"/>
+        <path d="M-3 3 C -22 6 -34 27 -20 33 C -10 37 -4 22 -3 7Z"/>
+      </g>
+    </g>
+    <rect x="-2.6" y="-14" width="5.2" height="34" rx="2.6" fill="#6b5fb5"/>
+    <path d="M-1 -13 Q -6 -26 -12 -30 M1 -13 Q 6 -26 12 -30" stroke="#6b5fb5" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  </symbol>
+
+  <symbol id="sStar" viewBox="-50 -50 100 100">
+    <polygon points="0,-44 11.8,-16.2 41.8,-13.6 19,6.2 25.9,35.6 0,20 -25.9,35.6 -19,6.2 -41.8,-13.6 -11.8,-16.2"
+      fill="#ffe07a" stroke="#ffe07a" stroke-width="9" stroke-linejoin="round"/>
+  </symbol>
+
+  <symbol id="sHeart" viewBox="0 0 100 92"><use href="#heartP" fill="currentColor"/></symbol>
+
+  <symbol id="sGoldHeart" viewBox="0 0 100 92">
+    <use href="#heartP" fill="url(#gGold)" stroke="#8f5f20" stroke-width="3"/>
+    <path d="M50 70 C 36 58 26 48 28 36 C 30 26 42 24 50 34 C 58 24 70 26 72 36 C 74 48 64 58 50 70Z" fill="none" stroke="#9c6a26" stroke-width="2" opacity=".6"/>
+  </symbol>
+
+  <symbol id="sPrint" viewBox="0 0 100 92">
+    <g clip-path="url(#heartClip)">
+      <rect width="100" height="92" fill="#ffd4e3"/>
+      <g fill="none" stroke="#d81f63" stroke-width="1.7">
+        <ellipse cx="48" cy="50" rx="4" ry="3"/><ellipse cx="48" cy="50" rx="8" ry="6.5"/><ellipse cx="48" cy="50" rx="12" ry="10"/>
+        <ellipse cx="48" cy="50" rx="16" ry="13.5"/><ellipse cx="48" cy="50" rx="20" ry="17"/><ellipse cx="48" cy="50" rx="24" ry="20.5"/>
+        <ellipse cx="48" cy="50" rx="28" ry="24"/><ellipse cx="48" cy="50" rx="32" ry="27.5"/><ellipse cx="48" cy="50" rx="36" ry="31"/>
+        <ellipse cx="48" cy="50" rx="40" ry="34.5"/><ellipse cx="48" cy="50" rx="44" ry="38"/><ellipse cx="48" cy="50" rx="48" ry="41.5"/>
+        <ellipse cx="48" cy="50" rx="52" ry="45"/><ellipse cx="48" cy="50" rx="56" ry="48.5"/><ellipse cx="48" cy="50" rx="60" ry="52"/>
+      </g>
+    </g>
+  </symbol>
+
+  <symbol id="sCamera" viewBox="0 0 24 24">
+    <path d="M4 7h3l2-2.5h6L17 7h3a1.5 1.5 0 0 1 1.5 1.5v10A1.5 1.5 0 0 1 20 20H4a1.5 1.5 0 0 1-1.5-1.5v-10A1.5 1.5 0 0 1 4 7Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+    <circle cx="12" cy="13" r="3.6" fill="none" stroke="currentColor" stroke-width="1.6"/>
+  </symbol>
+</svg>
+
+<!-- ================= INTRO ================= -->
+<section id="intro" aria-label="Конверт">
+  <svg class="deco stk" style="width:150px;height:150px;left:-46px;top:-30px"><use href="#sHibiscus"/></svg>
+  <svg class="deco stk slow flip" style="width:110px;height:110px;right:-28px;top:-14px"><use href="#sBlossom"/></svg>
+  <svg class="deco stk slow" style="width:80px;height:80px;left:-24px;top:34%"><use href="#sBlossom"/></svg>
+  <svg class="deco stk flip" style="width:100px;height:100px;right:-34px;top:46%"><use href="#sPlumeria"/></svg>
+  <svg class="deco stk" style="width:170px;height:170px;left:-50px;bottom:-40px"><use href="#sHibiscus"/></svg>
+  <svg class="deco stk slow" style="width:110px;height:110px;left:38%;bottom:-36px"><use href="#sBlossom"/></svg>
+  <svg class="deco stk flip" style="width:150px;height:150px;right:-44px;bottom:-24px"><use href="#sPlumeria"/></svg>
+
+  <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Відкрити">
+    <div class="env-back"></div>
+    <div class="env-card">💌</div>
+    <div class="env-l"></div><div class="env-r"></div><div class="env-b"></div>
+    <div class="env-flap"></div>
+    <div class="seal"><svg><use href="#sGoldHeart"/></svg></div>
+    <svg class="deco stk" style="width:120px;height:96px;left:-42px;top:-44px;z-index:5"><use href="#sBow"/></svg>
+    <svg class="deco stk slow" style="width:54px;height:46px;right:-14px;top:-26px;z-index:5"><use href="#sButterfly"/></svg>
+  </div>
+
+  <h1 class="intro-name">For <span data-bind="name"></span></h1>
+  <button class="tap-btn" id="tapBtn">TAP TO OPEN</button>
+</section>
+
+<div id="petals"></div>
+
+<!-- ================= MAIN ================= -->
+<main id="main" aria-hidden="true">
+
+  <!-- PAGE 1 -->
+  <section class="page p1">
+    <div class="bg-script" data-scribbles></div>
+
+    <div class="title-paper torn reveal"><span data-bind="name"></span></div>
+
+    <div style="position:relative">
+      <svg class="deco stk slow" style="width:120px;height:120px;left:-40px;top:-10px"><use href="#sPlumeria"/></svg>
+      <svg class="deco stk" style="width:110px;height:110px;left:-38px;top:30%"><use href="#sBlossom"/></svg>
+      <svg class="deco stk flip" style="width:66px;height:56px;right:-10px;top:42%"><use href="#sButterfly"/></svg>
+      <svg class="deco stk" style="width:112px;height:90px;right:-14px;top:-34px;z-index:7"><use href="#sBow"/></svg>
+      <figure class="polaroid hero reveal">
+        <div class="tape"></div>
+        <div class="photo" data-photo="hero.photo" data-label="Фото 1"></div>
+        <figcaption data-bind="hero.caption"></figcaption>
+      </figure>
+    </div>
+
+    <div class="row1">
+      <div class="ticket reveal">
+        <div class="ticket-in"><span data-bind="ticket.label"></span><span data-bind="ticket.emoji"></span></div>
+        <span class="ticket-no" data-bind="ticket.number"></span>
+      </div>
+      <svg class="deco stk flip" style="width:130px;height:130px;right:-40px;top:-40px"><use href="#sHibiscus"/></svg>
+    </div>
+
+    <div class="player reveal" id="player">
+      <div class="pl-top">
+        <div class="pl-cover photo" data-photo="song.cover" data-label=""></div>
+        <div class="pl-meta">
+          <div class="pl-title" data-bind="song.title"></div>
+          <div class="pl-artist" data-bind="song.artist"></div>
+        </div>
+        <div class="eq"><i></i><i></i><i></i><i></i></div>
+      </div>
+      <div class="pl-bar"><span id="tCur">0:00</span><div class="pl-track"><div class="pl-fill" id="tFill"></div></div><span id="tLeft">-0:30</span></div>
+      <button class="pl-btn" id="playBtn" aria-label="Play">
+        <svg viewBox="0 0 24 24" id="playIco"><path d="M7 4.5v15l13-7.5z" fill="currentColor"/></svg>
+      </button>
+      <div class="pl-foot">♪ our song</div>
+    </div>
+
+    <div class="postcard reveal" id="postcard" role="button" tabindex="0">
+      <p data-bind="postcard"></p>
+      <div class="stamp"><svg><use href="#sHeart"/></svg></div>
+    </div>
+
+    <div class="hint">SCROLL<b>⌄</b></div>
+  </section>
+
+  <!-- PAGE 2 -->
+  <section class="page p2">
+    <div class="bg-script" data-scribbles></div>
+    <div class="p2-grid">
+      <div class="strip gframe reveal">
+        <div class="photo" data-photo="strip.photos.0" data-label="Фото 2"></div>
+        <div class="photo" data-photo="strip.photos.1" data-label="Фото 3"></div>
+        <div class="photo" data-photo="strip.photos.2" data-label="Фото 4"></div>
+      </div>
+      <div class="p2-side">
+        <svg class="deco stk" style="width:170px;height:170px;right:-50px;top:-20px;z-index:2"><use href="#sHibiscus"/></svg>
+        <svg class="deco stk slow flip" style="width:120px;height:120px;left:-30px;top:18%;z-index:3"><use href="#sPlumeria"/></svg>
+        <svg class="deco stk" style="width:96px;height:96px;right:-34px;top:24%;z-index:3"><use href="#sBlossom"/></svg>
+        <div class="note torn reveal" data-bind="strip.note"></div>
+        <div class="sticker photo reveal" data-photo="strip.sticker" data-label="Стікер"></div>
+      </div>
+    </div>
+    <svg class="deco stk slow" style="width:120px;height:120px;left:-40px;bottom:120px"><use href="#sBlossom"/></svg>
+    <div class="banner torn"><p data-bind="strip.banner"></p></div>
+    <svg class="stk" style="position:relative;z-index:6;display:block;width:96px;height:88px;margin:-18px auto 0;rotate:-8deg"><use href="#sPrint"/></svg>
+  </section>
+
+  <!-- PAGE 3 -->
+  <section class="page p3">
+    <div class="bg-script" data-scribbles></div>
+    <svg class="stk" style="position:absolute;z-index:6;width:90px;height:84px;left:36%;top:30px;rotate:12deg"><use href="#sPrint"/></svg>
+    <svg class="deco stk slow" style="width:80px;height:80px;right:4px;top:70px;z-index:9"><use href="#sStar"/></svg>
+    <div class="gallery">
+      <div class="gitem reveal"><div class="gframe"><div class="photo" data-photo="gallery.0.photo" data-label="Фото 5"></div></div><div class="gcap" data-bind="gallery.0.caption"></div></div>
+      <div class="gitem reveal"><div class="gframe"><div class="photo" data-photo="gallery.1.photo" data-label="Фото 6"></div></div><div class="gcap" data-bind="gallery.1.caption"></div></div>
+      <div class="gitem reveal"><div class="gframe"><div class="photo" data-photo="gallery.2.photo" data-label="Фото 7"></div></div><div class="gcap" data-bind="gallery.2.caption"></div></div>
+      <div class="gitem reveal"><div class="gframe"><div class="photo" data-photo="gallery.3.photo" data-label="Фото 8"></div></div><div class="gcap" data-bind="gallery.3.caption"></div></div>
+      <div class="glabel torn reveal" data-bind="galleryLabel"></div>
+      <svg class="deco stk" style="width:120px;height:120px;left:-44px;top:46%"><use href="#sHibiscus"/></svg>
+    </div>
+    <svg class="deco stk flip" style="width:130px;height:130px;left:-30px;bottom:-30px"><use href="#sPlumeria"/></svg>
+  </section>
+
+  <!-- LETTER -->
+  <section class="page p4" id="letter">
+    <svg class="deco stk" style="width:130px;height:130px;left:-58px;top:20px;z-index:7"><use href="#sHibiscus"/></svg>
+    <svg class="deco stk slow flip" style="width:110px;height:110px;right:-40px;top:34px;z-index:7"><use href="#sBlossom"/></svg>
+    <article class="letter torn reveal">
+      <h2 class="l-greet" data-bind="letter.greeting"></h2>
+      <div class="l-div"><svg><use href="#sHeart"/></svg></div>
+      <p class="l-text" data-bind="letter.text"></p>
+      <div class="l-sign" data-bind="from"></div>
+    </article>
+    <svg class="deco stk" style="width:130px;height:130px;right:-40px;top:62%;z-index:7"><use href="#sBlossom"/></svg>
+
+    <div class="heart-wrap">
+      <button class="heart-btn" id="heartBtn" aria-label="❤"><svg><use href="#sHeart"/></svg></button>
+      <div class="heart-tip">TAP THE HEART</div>
+      <div class="finale" id="finale" data-bind="finale"></div>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  const get = (path) => path.split(".").reduce((o, k) => (o == null ? o : o[k]), CONFIG);
+  const fmt = (s) => String(s ?? "").replace(/\{name\}/g, CONFIG.name);
+
+  document.title = `For ${CONFIG.name} 💌`;
+
+  // text
+  document.querySelectorAll("[data-bind]").forEach((el) => { el.textContent = fmt(get(el.dataset.bind)); });
+
+  // photos / videos / placeholders
+  const isVideo = (s) => /\.(mp4|mov|webm|m4v)(\?|$)/i.test(s);
+  document.querySelectorAll("[data-photo]").forEach((el) => {
+    const src = get(el.dataset.photo);
+    if (src) {
+      el.innerHTML = isVideo(src)
+        ? `<video src="${src}" autoplay muted loop playsinline></video>`
+        : `<img src="${src}" alt="" loading="lazy">`;
+    } else {
+      el.innerHTML = `<div class="ph"><svg><use href="#sCamera"/></svg><span>${el.dataset.label || ""}</span></div>`;
+    }
+  });
+
+  // background handwriting
+  document.querySelectorAll("[data-scribbles]").forEach((box, i) => {
+    const lines = CONFIG.scribbles || [];
+    for (let k = 0; k < 7; k++) {
+      const p = document.createElement("p");
+      p.textContent = (lines[(k + i) % lines.length] + "   ").repeat(3);
+      p.style.top = `${8 + k * 14}%`;
+      box.appendChild(p);
+    }
+  });
+
+  // reveal on scroll
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+
+  // ---------- music player ----------
+  const player = document.getElementById("player");
+  const playIco = document.getElementById("playIco");
+  const tCur = document.getElementById("tCur"), tLeft = document.getElementById("tLeft"), tFill = document.getElementById("tFill");
+  const audio = CONFIG.song.src ? new Audio(CONFIG.song.src) : null;
+  if (audio) audio.loop = true;
+  let playing = false, fakeT = 0, fakeLen = 30, raf, last;
+  const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+  const ICON_PLAY = '<path d="M7 4.5v15l13-7.5z" fill="currentColor"/>';
+  const ICON_PAUSE = '<rect x="6" y="4.5" width="4" height="15" rx="1" fill="currentColor"/><rect x="14" y="4.5" width="4" height="15" rx="1" fill="currentColor"/>';
+  function render(t, len) {
+    tCur.textContent = mmss(t); tLeft.textContent = "-" + mmss(Math.max(0, len - t));
+    tFill.style.width = `${(t / len) * 100}%`;
+  }
+  function tick(now) {
+    if (!playing) return;
+    if (audio) { render(audio.currentTime, audio.duration || 30); }
+    else { fakeT = (fakeT + (now - (last || now)) / 1000) % fakeLen; last = now; render(fakeT, fakeLen); }
+    raf = requestAnimationFrame(tick);
+  }
+  function setPlaying(on) {
+    playing = on;
+    player.classList.toggle("playing", on);
+    playIco.innerHTML = on ? ICON_PAUSE : ICON_PLAY;
+    if (audio) on ? audio.play().catch(() => setPlaying(false)) : audio.pause();
+    last = null; cancelAnimationFrame(raf); if (on) raf = requestAnimationFrame(tick);
+  }
+  document.getElementById("playBtn").addEventListener("click", () => setPlaying(!playing));
+
+  // ---------- falling petals ----------
+  const petals = document.getElementById("petals");
+  function spawnPetal() {
+    if (petals.childElementCount > 10 || document.hidden) return;
+    const p = document.createElement("div");
+    p.className = "petal";
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.setProperty("--dx", (Math.random() * 120 - 60) + "px");
+    p.style.setProperty("--r", (Math.random() * 720 - 360) + "deg");
+    p.style.animationDuration = 7 + Math.random() * 6 + "s";
+    p.style.scale = 0.6 + Math.random() * 0.7;
+    p.addEventListener("animationend", () => p.remove());
+    petals.appendChild(p);
+  }
+
+  // ---------- envelope ----------
+  const intro = document.getElementById("intro");
+  const env = document.getElementById("envelope");
+  let opened = false;
+  function openEnvelope() {
+    if (opened) return; opened = true;
+    env.classList.add("open");
+    if (audio) setPlaying(true);
+    setTimeout(() => {
+      intro.classList.add("gone");
+      document.body.classList.remove("locked");
+      document.getElementById("main").removeAttribute("aria-hidden");
+      setInterval(spawnPetal, 1100);
+    }, 2100);
+  }
+  env.addEventListener("click", openEnvelope);
+  document.getElementById("tapBtn").addEventListener("click", openEnvelope);
+  env.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") openEnvelope(); });
+
+  // postcard -> letter
+  const toLetter = () => document.getElementById("letter").scrollIntoView({ behavior: "smooth" });
+  document.getElementById("postcard").addEventListener("click", toLetter);
+
+  // ---------- heart burst ----------
+  const EMO = ["❤️", "💗", "💕", "💖", "🌸", "💞"];
+  document.getElementById("heartBtn").addEventListener("click", (ev) => {
+    const r = ev.currentTarget.getBoundingClientRect();
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    for (let i = 0; i < 26; i++) {
+      const s = document.createElement("span");
+      s.className = "burst";
+      s.textContent = EMO[i % EMO.length];
+      const a = Math.random() * Math.PI * 2, d = 90 + Math.random() * 170;
+      s.style.left = cx + "px"; s.style.top = cy + "px";
+      s.style.setProperty("--dx", Math.cos(a) * d + "px");
+      s.style.setProperty("--dy", Math.sin(a) * d - 60 + "px");
+      s.style.setProperty("--r", (Math.random() * 80 - 40) + "deg");
+      s.style.fontSize = 18 + Math.random() * 20 + "px";
+      s.addEventListener("animationend", () => s.remove());
+      document.body.appendChild(s);
+    }
+    if (navigator.vibrate) navigator.vibrate(30);
+    document.getElementById("finale").classList.add("show");
+  });
+})();
+</script>
+</body>
+</html>
