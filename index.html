@@ -34,10 +34,10 @@ const CONFIG = {
   },
   ticket: { label: "BUNNY", emoji: "🐰", number: "92914" },
   song: {
-    title: "Our Song",
-    artist: "Artist name",
+    title: "Улица Сталеваров",
+    artist: "Валентин Стрикало",
     cover: "",                    // обкладинка пісні (картинка)
-    src: "",                      // аудіофайл, напр. "photos/song.mp3"
+    src: "photos/song.mp3",       // аудіофайл, напр. "photos/song.mp3"
   },
   postcard: "I want you to open this",
 
@@ -200,7 +200,7 @@ main{position:relative;max-width:480px;margin:0 auto;overflow:hidden}
 .pl-cover .ph svg{width:22px;height:22px}
 .pl-cover .ph span{display:none}
 .pl-meta{min-width:0;flex:1}
-.pl-title{font:700 19px/1.2 var(--ui);color:#3a0a17;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-title{font:700 18px/1.2 var(--ui);color:#3a0a17}
 .pl-artist{font:500 15px/1.3 var(--ui);color:#a03357}
 .eq{display:flex;gap:3px;align-items:flex-end;height:18px;margin-left:auto;flex:0 0 auto}
 .eq i{width:4px;height:100%;background:var(--wine-2);border-radius:2px;transform-origin:bottom;transform:scaleY(.25)}
@@ -577,7 +577,11 @@ main{position:relative;max-width:480px;margin:0 auto;overflow:hidden}
   const playIco = document.getElementById("playIco");
   const tCur = document.getElementById("tCur"), tLeft = document.getElementById("tLeft"), tFill = document.getElementById("tFill");
   const audio = CONFIG.song.src ? new Audio(CONFIG.song.src) : null;
-  if (audio) audio.loop = true;
+  if (audio) {
+    audio.loop = true;
+    audio.preload = "metadata";
+    audio.addEventListener("loadedmetadata", () => render(audio.currentTime, audio.duration));
+  }
   let playing = false, fakeT = 0, fakeLen = 30, raf, last;
   const mmss = (s) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
   const ICON_PLAY = '<path d="M7 4.5v15l13-7.5z" fill="currentColor"/>';
