@@ -17,7 +17,8 @@
    Підтримуються: .jpg .jpeg .png .webp .gif  та відео .mp4 .mov .webm
    ===================================================================== */
 const CONFIG = {
-  name: "Sunshine",               // ім'я того, кому сайт
+  name: "Катюша",                 // ім'я на першій сторінці
+  envelope: "Для Катюші",         // напис під конвертом
   from: "Ваня",                   // підпис у листі
 
   // фонові «рукописні» фрази
@@ -29,7 +30,7 @@ const CONFIG = {
 
   // Сторінка 1
   hero: {
-    photo: "",
+    photo: "photos/p1.jpg",
     caption: "I love spending time with you ❤️",
   },
   ticket: { label: "BUNNY", emoji: "🐰", number: "92914" },
@@ -43,7 +44,7 @@ const CONFIG = {
 
   // Сторінка 2
   strip: {
-    photos: ["", "", ""],
+    photos: ["photos/p5.jpg", "", ""],
     note: "I love you baby ❤️",
     sticker: "",                  // маленьке фото/стікер справа
     banner: "my baby, I love you · my baby, I love you",
@@ -51,10 +52,10 @@ const CONFIG = {
 
   // Сторінка 3
   gallery: [
-    { photo: "", caption: "I love us ❤️" },
-    { photo: "", caption: "I love you ❤️" },
-    { photo: "", caption: "I love going on road trips with you 😊" },
-    { photo: "", caption: "I love you ❤️" },
+    { photo: "photos/p4.jpg", caption: "I love us ❤️" },
+    { photo: { src: "photos/p2.jpg", pos: "50% 90%" }, caption: "I love you ❤️" },
+    { photo: "photos/p6.jpg", caption: "I love being with you 😊" },
+    { photo: "photos/p3.jpg", caption: "I love you ❤️" },
   ],
   galleryLabel: "i love you",
 
@@ -415,7 +416,7 @@ main{position:relative;max-width:480px;margin:0 auto;overflow:hidden}
     <svg class="deco stk slow" style="width:54px;height:46px;right:-14px;top:-26px;z-index:5"><use href="#sButterfly"/></svg>
   </div>
 
-  <h1 class="intro-name">For <span data-bind="name"></span></h1>
+  <h1 class="intro-name" data-bind="envelope"></h1>
   <button class="tap-btn" id="tapBtn">TAP TO OPEN</button>
 </section>
 
@@ -507,7 +508,7 @@ main{position:relative;max-width:480px;margin:0 auto;overflow:hidden}
       <div class="gitem reveal"><div class="gframe"><div class="photo" data-photo="gallery.2.photo" data-label="Фото 7"></div></div><div class="gcap" data-bind="gallery.2.caption"></div></div>
       <div class="gitem reveal"><div class="gframe"><div class="photo" data-photo="gallery.3.photo" data-label="Фото 8"></div></div><div class="gcap" data-bind="gallery.3.caption"></div></div>
       <div class="glabel torn reveal" data-bind="galleryLabel"></div>
-      <svg class="deco stk" style="width:120px;height:120px;left:-44px;top:46%"><use href="#sHibiscus"/></svg>
+      <svg class="deco stk" style="width:84px;height:84px;left:-46px;top:44%"><use href="#sHibiscus"/></svg>
     </div>
     <svg class="deco stk flip" style="width:130px;height:130px;left:-30px;bottom:-30px"><use href="#sPlumeria"/></svg>
   </section>
@@ -537,7 +538,7 @@ main{position:relative;max-width:480px;margin:0 auto;overflow:hidden}
   const get = (path) => path.split(".").reduce((o, k) => (o == null ? o : o[k]), CONFIG);
   const fmt = (s) => String(s ?? "").replace(/\{name\}/g, CONFIG.name);
 
-  document.title = `For ${CONFIG.name} 💌`;
+  document.title = `${CONFIG.envelope || CONFIG.name} 💌`;
 
   // text
   document.querySelectorAll("[data-bind]").forEach((el) => { el.textContent = fmt(get(el.dataset.bind)); });
@@ -545,11 +546,13 @@ main{position:relative;max-width:480px;margin:0 auto;overflow:hidden}
   // photos / videos / placeholders
   const isVideo = (s) => /\.(mp4|mov|webm|m4v)(\?|$)/i.test(s);
   document.querySelectorAll("[data-photo]").forEach((el) => {
-    const src = get(el.dataset.photo);
+    const v = get(el.dataset.photo);
+    const src = v && typeof v === "object" ? v.src : v;
+    const pos = v && typeof v === "object" && v.pos ? ` style="object-position:${v.pos}"` : "";
     if (src) {
       el.innerHTML = isVideo(src)
-        ? `<video src="${src}" autoplay muted loop playsinline></video>`
-        : `<img src="${src}" alt="" loading="lazy">`;
+        ? `<video src="${src}"${pos} autoplay muted loop playsinline></video>`
+        : `<img src="${src}"${pos} alt="" loading="lazy">`;
     } else {
       el.innerHTML = `<div class="ph"><svg><use href="#sCamera"/></svg><span>${el.dataset.label || ""}</span></div>`;
     }
